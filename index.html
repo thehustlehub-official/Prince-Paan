@@ -1,0 +1,206 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#15231b">
+  <meta name="description" content="Discover premium paan and refreshing drinks at Prince Paan.">
+  <title>Prince Paan | The Art of Paan</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./hero.png">
+  <link rel="stylesheet" href="./style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <a class="brand" href="#" data-home aria-label="Prince Paan home">
+        <span class="brand-mark"><i class="fa-solid fa-leaf"></i></span>
+        <span><strong id="brandName">PRINCE PAAN</strong><small>THE ART OF PAAN</small></span>
+      </a>
+      <button class="icon-button" id="searchOpen" aria-label="Search products">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </header>
+
+    <main id="appMain">
+      <section id="menuPage" class="page active">
+        <div class="hero">
+          <img id="heroImage" src="./hero.png" alt="Prince Paan premium paan selection"
+               onerror="this.style.display='none';this.parentElement.classList.add('hero-no-image')">
+          <div class="hero-shade"></div>
+          <div class="hero-content">
+            <span class="eyebrow"><i class="fa-solid fa-star"></i> CRAFTED WITH CARE</span>
+            <h1>A Royal Taste.<br><em>A Timeless Tradition.</em></h1>
+            <p>Discover the finest paan, refreshing drinks and signature flavours.</p>
+            <div class="hero-bottom">
+              <span class="store-status" id="storeStatus">
+                <span class="status-dot"></span>
+                <span id="storeStatusText">Checking store...</span>
+              </span>
+              <span class="hero-note"><i class="fa-solid fa-leaf"></i> Made for you</span>
+            </div>
+          </div>
+          <span class="hero-decoration"><i class="fa-solid fa-leaf"></i></span>
+        </div>
+
+        <section class="recommend-section" id="recommendSection">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">HANDPICKED FOR YOU</span>
+              <h2>In-house favourites</h2>
+            </div>
+            <span class="tiny-label"><i class="fa-solid fa-sparkles"></i> Signature picks</span>
+          </div>
+          <div class="recommend-viewport">
+            <div id="recommendTrack" class="recommend-track">
+              <div class="loading-card">Discovering our favourites...</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="menu-section" id="menuSection">
+          <div class="section-heading">
+            <div>
+              <span class="eyebrow">EXPLORE OUR COLLECTION</span>
+              <h2>Find your flavour</h2>
+            </div>
+            <span class="result-count" id="resultCount"></span>
+          </div>
+
+          <div class="category-strip" id="categoryStrip" aria-label="Product categories">
+            <button class="category-chip active" data-category="all">
+              <i class="fa-solid fa-border-all"></i><span>All</span>
+            </button>
+          </div>
+
+          <div class="product-grid" id="productGrid">
+            <div class="empty-state">
+              <i class="fa-solid fa-leaf"></i>
+              <h3>Preparing your menu</h3>
+              <p>Our collection will appear here shortly.</p>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <section id="cartPage" class="page">
+        <div class="page-heading">
+          <span class="eyebrow">YOUR SELECTION</span>
+          <h1>Your cart</h1>
+          <p>Every great experience starts with a favourite.</p>
+        </div>
+        <div id="cartContent"></div>
+      </section>
+
+      <section id="reviewsPage" class="page">
+        <div class="page-heading">
+          <span class="eyebrow">A GLIMPSE OF OUR WORLD</span>
+          <h1>Stories & moments</h1>
+          <p>Explore our latest videos and moments at Prince Paan.</p>
+        </div>
+        <div id="videosList" class="videos-list">
+          <div class="empty-state">
+            <i class="fa-solid fa-film"></i>
+            <h3>Something special is coming</h3>
+            <p>Our latest moments will appear here.</p>
+          </div>
+        </div>
+        <section class="reviews-placeholder">
+          <i class="fa-regular fa-star"></i>
+          <h3>Customer reviews</h3>
+          <p>Reviews coming soon.</p>
+        </section>
+      </section>
+    </main>
+
+    <nav class="bottom-nav" id="bottomNav" aria-label="Main navigation">
+      <button class="nav-item active" data-view="menuPage">
+        <i class="fa-solid fa-utensils"></i><span>Menu</span>
+      </button>
+      <button class="nav-item" data-view="cartPage">
+        <span class="nav-icon-wrap"><i class="fa-solid fa-bag-shopping"></i><b id="cartBadge" class="cart-badge hidden">0</b></span>
+        <span>Cart</span>
+      </button>
+      <button class="nav-item" data-view="reviewsPage">
+        <i class="fa-regular fa-circle-play"></i><span>Reviews</span>
+      </button>
+    </nav>
+  </div>
+
+  <div id="searchOverlay" class="overlay hidden" aria-hidden="true">
+    <div class="search-panel">
+      <div class="overlay-header">
+        <button class="icon-button" data-back aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button>
+        <div class="search-input-wrap">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input id="searchInput" type="search" placeholder="Search paan, drinks..." autocomplete="off">
+          <button class="icon-button small-button" id="searchClear" aria-label="Clear search"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+      </div>
+      <div id="searchResults" class="search-results">
+        <p class="muted-text">Search our collection.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="productOverlay" class="overlay hidden" aria-hidden="true">
+    <div class="detail-panel">
+      <div class="detail-toolbar">
+        <button class="icon-button" data-back aria-label="Back to menu"><i class="fa-solid fa-arrow-left"></i></button>
+        <span class="detail-toolbar-title">PRODUCT DETAILS</span>
+        <button class="icon-button" data-close="productOverlay" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div id="productDetailContent"></div>
+    </div>
+  </div>
+
+  <div id="checkoutOverlay" class="overlay hidden" aria-hidden="true">
+    <div class="checkout-panel">
+      <div class="detail-toolbar">
+        <button class="icon-button" data-back aria-label="Back to cart"><i class="fa-solid fa-arrow-left"></i></button>
+        <span class="detail-toolbar-title">COMPLETE YOUR ORDER</span>
+        <button class="icon-button" data-close="checkoutOverlay" aria-label="Close"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="checkout-body">
+        <span class="eyebrow">ALMOST YOURS</span>
+        <h2>Order details</h2>
+        <p class="muted-text">Tell us how to identify your order.</p>
+        <div id="checkoutSummary" class="checkout-summary"></div>
+        <form id="checkoutForm">
+          <label for="customerName">Your name</label>
+          <input id="customerName" name="customerName" type="text" maxlength="100" autocomplete="name" placeholder="Enter your name" required>
+          <label for="customerPhone">Phone number</label>
+          <input id="customerPhone" name="customerPhone" type="tel" inputmode="numeric" maxlength="15" autocomplete="tel" placeholder="Enter your phone number" required>
+          <label for="specialRequest">Special request <span>(optional)</span></label>
+          <textarea id="specialRequest" name="specialRequest" rows="3" maxlength="500" placeholder="Any special instructions?"></textarea>
+          <div class="checkout-total"><span>Total</span><strong id="checkoutTotal">₹0</strong></div>
+          <p class="checkout-disclaimer"><i class="fa-solid fa-circle-info"></i> Submitting places an order request; it does not process an online payment.</p>
+          <button type="submit" id="placeOrderButton" class="primary-button full-button">
+            <span>Place order</span><i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="closedOverlay" class="overlay hidden" aria-hidden="true">
+    <div class="message-dialog">
+      <span class="dialog-icon closed-icon"><i class="fa-solid fa-moon"></i></span>
+      <span class="eyebrow">BACK SOON</span>
+      <h2>We're currently closed</h2>
+      <p id="closedMessage">You can explore our menu. Ordering will be available when the store opens.</p>
+      <button class="primary-button full-button" data-close="closedOverlay">Continue browsing</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="./supabase.js"></script>
+  <script src="./script.js"></script>
+</body>
+</html>

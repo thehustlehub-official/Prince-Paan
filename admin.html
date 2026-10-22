@@ -1,0 +1,176 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111711">
+  <title>Prince Paan — Admin Studio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <link rel="stylesheet" href="admin.css">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="admin.js" defer></script>
+</head>
+<body>
+  <div id="toast" class="toast" role="status"></div>
+
+  <section id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="brand-mark"><i class="fa-solid fa-leaf"></i></div>
+      <p class="eyebrow">PRINCE PAAN</p>
+      <h1>Admin Studio</h1>
+      <p class="muted">Your store, beautifully managed.</p>
+      <form id="loginForm">
+        <label>Email address
+          <input id="loginEmail" type="email" autocomplete="username" required placeholder="admin@example.com">
+        </label>
+        <label>Password
+          <input id="loginPassword" type="password" autocomplete="current-password" required placeholder="Your password">
+        </label>
+        <button id="loginButton" class="btn primary full" type="submit">
+          <i class="fa-solid fa-arrow-right-to-bracket"></i> Sign in
+        </button>
+        <p id="loginMessage" class="form-message"></p>
+      </form>
+      <p class="muted tiny">Administrator access only</p>
+    </div>
+  </section>
+
+  <div id="adminApp" class="app hidden">
+    <aside id="sidebar" class="sidebar">
+      <a class="brand" href="#" data-page="dashboard">
+        <span class="brand-mark"><i class="fa-solid fa-leaf"></i></span>
+        <span><strong>PRINCE PAAN</strong><small>ADMIN STUDIO</small></span>
+      </a>
+
+      <div class="store-chip">
+        <span id="sidebarStatusDot" class="status-dot"></span>
+        <span id="sidebarStatusText">Connecting…</span>
+      </div>
+
+      <p class="nav-heading">WORKSPACE</p>
+      <nav class="navigation">
+        <button class="nav-link active" data-page="dashboard"><i class="fa-solid fa-chart-pie"></i> Dashboard</button>
+        <button class="nav-link" data-page="orders"><i class="fa-solid fa-receipt"></i> Orders <span id="pendingBadge" class="nav-badge">0</span></button>
+        <button class="nav-link" data-page="products"><i class="fa-solid fa-box-open"></i> Products</button>
+        <button class="nav-link" data-page="categories"><i class="fa-solid fa-layer-group"></i> Categories</button>
+        <button class="nav-link" data-page="videos"><i class="fa-solid fa-circle-play"></i> Reviews & Videos</button>
+      </nav>
+
+      <p class="nav-heading">STORE</p>
+      <nav class="navigation">
+        <button class="nav-link" data-page="settings"><i class="fa-solid fa-sliders"></i> Store settings</button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="secure-label"><i class="fa-solid fa-shield-halved"></i> Secure admin session</div>
+        <button id="logoutButton" class="nav-link logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Sign out</button>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div class="topbar-left">
+          <button id="mobileMenu" class="icon-btn mobile-menu" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
+          <div><p class="eyebrow">PRINCE PAAN / CONTROL CENTRE</p><h1 id="pageTitle">Dashboard</h1></div>
+        </div>
+        <div class="topbar-actions">
+          <span id="connectionStatus" class="connection"><span class="status-dot"></span> Connecting</span>
+          <button id="refreshButton" class="btn secondary"><i class="fa-solid fa-rotate"></i><span> Refresh</span></button>
+        </div>
+      </header>
+
+      <div id="appMessage" class="app-message hidden"></div>
+
+      <section id="page-dashboard" class="page">
+        <div class="welcome-row">
+          <div><p class="eyebrow">YOUR BUSINESS AT A GLANCE</p><h2 id="dashboardStoreName">PRINCE PAAN</h2><p id="dashboardStoreMessage" class="muted">Loading store status…</p></div>
+          <div class="store-toggle-card">
+            <div><span class="muted tiny">ORDER ACCEPTANCE</span><strong id="dashboardStoreStatus">OPEN</strong></div>
+            <label class="switch"><input id="quickStoreToggle" type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card"><span class="stat-icon"><i class="fa-solid fa-receipt"></i></span><p>Total orders</p><strong id="statOrders">0</strong><small>Orders received</small></article>
+          <article class="stat-card"><span class="stat-icon amber"><i class="fa-solid fa-clock"></i></span><p>Active orders</p><strong id="statPending">0</strong><small>Need attention</small></article>
+          <article class="stat-card"><span class="stat-icon gold"><i class="fa-solid fa-indian-rupee-sign"></i></span><p>Delivered revenue</p><strong id="statRevenue">₹0</strong><small>Delivered orders only</small></article>
+          <article class="stat-card"><span class="stat-icon blue"><i class="fa-solid fa-box"></i></span><p>Available products</p><strong id="statProducts">0</strong><small>Visible and available</small></article>
+        </div>
+
+        <section class="panel">
+          <div class="panel-head"><div><p class="eyebrow">LATEST ACTIVITY</p><h2>Recent orders</h2></div><button class="btn secondary" data-page="orders">View all <i class="fa-solid fa-arrow-right"></i></button></div>
+          <div id="recentOrders" class="table-wrap"></div>
+        </section>
+
+        <section class="panel quick-panel">
+          <div><p class="eyebrow">QUICK ACTIONS</p><h2>Manage your store</h2><p class="muted">Keep your menu fresh and your customers informed.</p></div>
+          <div class="quick-actions">
+            <button class="btn primary" data-page="products"><i class="fa-solid fa-plus"></i> Add product</button>
+            <button class="btn secondary" data-page="categories"><i class="fa-solid fa-layer-group"></i> Categories</button>
+            <button class="btn secondary" data-page="videos"><i class="fa-solid fa-video"></i> Add video</button>
+            <button class="btn secondary" data-page="settings"><i class="fa-solid fa-store"></i> Store messages</button>
+          </div>
+        </section>
+      </section>
+
+      <section id="page-orders" class="page hidden">
+        <div class="page-intro"><div><p class="eyebrow">CUSTOMER ACTIVITY</p><h2>Orders</h2><p class="muted">Review orders and update their status.</p></div>
+          <select id="orderFilter" aria-label="Filter orders"><option value="all">All orders</option><option value="pending">Pending</option><option value="confirmed">Confirmed</option><option value="preparing">Preparing</option><option value="ready">Ready</option><option value="delivered">Delivered</option><option value="cancelled">Cancelled</option></select>
+        </div>
+        <section class="panel"><div id="ordersTable" class="table-wrap"></div></section>
+      </section>
+
+      <section id="page-products" class="page hidden">
+        <div class="page-intro"><div><p class="eyebrow">YOUR MENU</p><h2>Products</h2><p class="muted">Manage prices, photos, availability and recommendations.</p></div><button id="addProductButton" class="btn primary"><i class="fa-solid fa-plus"></i> Add product</button></div>
+        <div class="toolbar"><label class="search-field"><i class="fa-solid fa-magnifying-glass"></i><input id="productSearch" type="search" placeholder="Search products…"></label><select id="productCategoryFilter" aria-label="Filter category"><option value="all">All categories</option></select></div>
+        <div id="productsGrid" class="products-grid"></div>
+      </section>
+
+      <section id="page-categories" class="page hidden">
+        <div class="page-intro"><div><p class="eyebrow">MENU STRUCTURE</p><h2>Categories</h2><p class="muted">Organise the customer menu with icons and sort order.</p></div><button id="addCategoryButton" class="btn primary"><i class="fa-solid fa-plus"></i> Add category</button></div>
+        <section class="panel"><div id="categoriesTable" class="table-wrap"></div></section>
+      </section>
+
+      <section id="page-videos" class="page hidden">
+        <div class="page-intro"><div><p class="eyebrow">CUSTOMER REVIEWS PAGE</p><h2>Videos & Media</h2><p class="muted">Manage video links, thumbnails and captions.</p></div><button id="addVideoButton" class="btn primary"><i class="fa-solid fa-plus"></i> Add video</button></div>
+        <div class="upload-note"><i class="fa-solid fa-cloud-arrow-up"></i><div><strong>Drag, drop or browse files</strong><p>Upload media using the existing Supabase Storage bucket. If no bucket is configured, use a hosted URL instead.</p></div></div>
+        <div id="videosGrid" class="videos-grid"></div>
+      </section>
+
+      <section id="page-settings" class="page hidden">
+        <div class="page-intro"><div><p class="eyebrow">BRAND & CUSTOMER EXPERIENCE</p><h2>Store settings</h2><p class="muted">Control store availability and customer-facing messages.</p></div></div>
+        <form id="settingsForm" class="settings-layout">
+          <section class="panel settings-card">
+            <p class="eyebrow">STORE IDENTITY</p><h2>Brand details</h2>
+            <label>Store name<input id="settingStoreName" required maxlength="150"></label>
+            <label>Logo URL or root filename<input id="settingLogo" placeholder="logo.png"></label>
+            <div id="logoPreview" class="logo-preview"></div>
+            <label>WhatsApp number<input id="settingWhatsApp" inputmode="tel" placeholder="918384019015"></label>
+            <label>Google Reviews URL<input id="settingReviews" type="url" placeholder="https://..."></label>
+          </section>
+
+          <section class="panel settings-card">
+            <p class="eyebrow">ORDER AVAILABILITY</p><h2>Store status</h2>
+            <div class="setting-toggle-row"><div><strong>Accept orders</strong><p class="muted tiny">When off, customers should only browse the menu.</p></div><label class="switch"><input id="settingStoreOpen" type="checkbox"><span class="slider"></span></label></div>
+            <label>Message when OPEN <span class="field-help">Saved in this browser only; no database schema changes.</span><textarea id="settingOpenMessage" rows="3" maxlength="500" placeholder="Welcome to Prince Paan! We are accepting orders."></textarea></label>
+            <label>Message when CLOSED <span class="field-help">Saved in the existing shop_settings.closed_message column.</span><textarea id="settingClosedMessage" rows="4" maxlength="1000"></textarea></label>
+            <button id="saveSettingsButton" class="btn primary full" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save settings</button>
+          </section>
+        </form>
+        <section class="panel"><p class="eyebrow">MEDIA STORAGE</p><h2>Uploads</h2><p class="muted">The admin panel does not create buckets or modify Supabase. Uploads require an existing bucket with permissions for your authenticated administrator. If uploads fail, you can still use public image/video URLs.</p></section>
+      </section>
+    </main>
+  </div>
+
+  <div id="modal" class="modal hidden" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <section class="modal-card" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <header class="modal-head"><div><p class="eyebrow">PRINCE PAAN / EDITOR</p><h2 id="modalTitle">Edit item</h2></div><button class="icon-btn" data-modal-close aria-label="Close"><i class="fa-solid fa-xmark"></i></button></header>
+      <form id="editorForm"><div id="modalBody" class="modal-body form-grid"></div><footer class="modal-foot"><button type="button" class="btn secondary" data-modal-close>Cancel</button><button id="modalSave" class="btn primary" type="submit"><i class="fa-solid fa-floppy-disk"></i> Save changes</button></footer></form>
+    </section>
+  </div>
+</body>
+</html>

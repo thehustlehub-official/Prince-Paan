@@ -1,0 +1,15 @@
+
+{
+  "id": "./",
+  "name": "Prince Paan",
+  "short_name": "Prince Paan",
+  "description": "Discover premium paan and refreshing drinks.",
+  "lang": "en-IN",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#121a15",
+  "theme_color": "#15231b",
+  "categories": ["food", "shopping"]
+}
