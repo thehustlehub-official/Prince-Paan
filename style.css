@@ -471,3 +471,219 @@ button:focus-visible,
     transition-duration: .01ms !important;
   }
 }
+
+/* ==========================================
+   PRINCE PAAN — PREMIUM PRODUCT DETAIL V2
+   Square image + sticky bottom purchase bar
+   ========================================== */
+
+/* Product detail overlay: full-screen app layout */
+#productOverlay {
+  align-items: stretch;
+  padding: 0;
+}
+
+#productOverlay .detail-panel {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 700px;
+  height: 100%;
+  height: 100dvh;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg);
+  overscroll-behavior: contain;
+}
+
+/* Keep toolbar at the top */
+#productOverlay .detail-toolbar {
+  position: relative;
+  top: auto;
+  flex: 0 0 auto;
+  min-height: 66px;
+}
+
+/* Only the product information area scrolls */
+#productOverlay #productDetailContent {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding: 18px 18px calc(24px + env(safe-area-inset-bottom));
+}
+
+/* Perfect 1:1 image with premium rounded corners */
+#productOverlay #productDetailContent > .detail-hero-image {
+  display: block;
+  width: 100%;
+  max-width: 460px;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  min-height: 0;
+  max-height: none;
+  margin: 0 auto 22px;
+  object-fit: cover;
+  object-position: center;
+  border-radius: 24px;
+  border: 1px solid rgba(201, 173, 115, 0.2);
+  background: var(--surface-2);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+}
+
+/* Clean content hierarchy */
+#productOverlay #productDetailContent .detail-content {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 0 2px 12px;
+}
+
+#productOverlay .detail-category {
+  display: inline-block;
+  margin-bottom: 7px;
+  font-size: 10px;
+  letter-spacing: 1.6px;
+}
+
+#productOverlay .detail-content h1 {
+  margin: 3px 0 10px;
+  font-size: clamp(25px, 6vw, 34px);
+  line-height: 1.2;
+  letter-spacing: -0.4px;
+  overflow-wrap: anywhere;
+}
+
+#productOverlay .detail-price {
+  margin: 10px 0 14px;
+  font-size: 25px;
+  line-height: 1.25;
+}
+
+#productOverlay .detail-description {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+
+/* Sticky purchase bar at the bottom */
+#productOverlay #productDetailContent .detail-actions {
+  position: sticky;
+  bottom: calc(-24px - env(safe-area-inset-bottom));
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 26px -18px calc(-24px - env(safe-area-inset-bottom));
+  padding: 14px 18px calc(14px + env(safe-area-inset-bottom));
+  background: rgba(18, 26, 21, 0.97);
+  border-top: 1px solid rgba(201, 173, 115, 0.2);
+  box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+}
+
+/* Comfortable quantity stepper */
+#productOverlay .detail-actions .quantity-control {
+  flex: 0 0 auto;
+  gap: 10px;
+  min-height: 48px;
+  padding: 6px;
+  border-radius: 15px;
+  background: var(--surface);
+}
+
+#productOverlay .detail-actions .quantity-control button {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+#productOverlay .detail-actions .quantity-control strong {
+  min-width: 16px;
+  font-size: 13px;
+}
+
+/* Prominent Add to Cart button */
+#productOverlay .detail-actions .primary-button {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 48px;
+  padding: 13px 12px;
+  border-radius: 15px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+#productOverlay .detail-actions .primary-button span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Closed-store message remains readable */
+#productOverlay #productDetailContent .detail-content > .muted-text {
+  margin-top: 16px !important;
+  padding-bottom: 8px;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+/* Small phones */
+@media (max-width: 380px) {
+  #productOverlay #productDetailContent {
+    padding: 13px 13px calc(20px + env(safe-area-inset-bottom));
+  }
+
+  #productOverlay #productDetailContent > .detail-hero-image {
+    border-radius: 19px;
+    margin-bottom: 18px;
+  }
+
+  #productOverlay #productDetailContent .detail-actions {
+    gap: 8px;
+    margin-right: -13px;
+    margin-left: -13px;
+    padding-right: 13px;
+    padding-left: 13px;
+  }
+
+  #productOverlay .detail-actions .quantity-control {
+    gap: 6px;
+  }
+
+  #productOverlay .detail-actions .quantity-control button {
+    width: 30px;
+    height: 32px;
+  }
+
+  #productOverlay .detail-actions .primary-button {
+    gap: 7px;
+    font-size: 11px;
+  }
+}
+
+/* Desktop / tablet */
+@media (min-width: 650px) {
+  #productOverlay #productDetailContent {
+    padding: 24px 28px calc(28px + env(safe-area-inset-bottom));
+  }
+
+  #productOverlay #productDetailContent > .detail-hero-image {
+    max-width: 420px;
+    border-radius: 26px;
+  }
+
+  #productOverlay #productDetailContent .detail-actions {
+    margin-right: -28px;
+    margin-left: -28px;
+    padding-right: 28px;
+    padding-left: 28px;
+  }
+}
+
+/* Hide the separate customer-review placeholder */
+#reviewsPage .reviews-placeholder {
+  display: none !important;
+}
